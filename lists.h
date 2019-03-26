@@ -6,27 +6,37 @@
 
 template <class T>
 struct Node {
-    T value;
-    struct Node* next;
+    public:
+        T value;
+        struct Node* next;
+
+        Node(T value) {
+            this->value = value;
+        }
+        ~Node() {
+            if (this->next != NULL)
+                free(this->next);
+        }
 };
 
 template <class T>
-struct List {
+struct LinkedList {
     private:
         int length = 0;
-        struct Node<T>* start = NULL;
+        struct Node<T> *start   = NULL,
+                       *end     = NULL;
 
     public:
-        List() {
+        LinkedList() {
         }
-        ~List() {
+        ~LinkedList() {
         }
 
         int size() {
             return this->length;
         }
         void add(T v, int index) {
-            if (index > length) {
+            if (index >= length) {
                 this->append(v);
             } else {
                 struct Node<T>* temp = this->start;
@@ -46,14 +56,14 @@ struct List {
                 this->start = (struct Node<T>*) malloc(sizeof(struct Node<T>));
                 this->start->value = v;
                 this->start->next = NULL;
-            } else {
-                struct Node<T>* temp = this->start;
-                while (temp->next != NULL)
-                    temp = temp->next;
 
-                temp->next = (struct Node<T>*) malloc(sizeof(struct Node<T>));
-                temp->next->value = v;
-                temp->next->next = NULL;
+                this->end = this->start;
+            } else {
+                this->end->next = (struct Node<T>*) malloc(sizeof(struct Node<T>));
+                this->end->next->value = v;
+                this->end->next->next = NULL;
+
+                this->end = this->end->next;
             }
 
             this->length++;
@@ -115,7 +125,36 @@ struct List {
             return true;
         }
         void sort(bool (*comp)(T, T)) {
-            std::cout << "Comp: " << comp(this->start->value, this->start->next->value) << std::endl;
+            struct Node<T>* temp_n = (struct Node<T>*) malloc(sizeof(struct Node<T>));
+            temp_n->next = this->start;
+
+            struct Node<T> *co = temp_n,
+                           *be_cu = this->start;
+
+            for (int i = 1; i < this->length; i++) {
+                co = temp_n;
+                bool same = false;
+
+                for (int j = 0; j < i; j++) {
+                    if (!comp(co->next->value, be_cu->next->value)) {
+                        struct Node<T>* h = be_cu->next;
+                        be_cu->next = be_cu->next->next;
+
+                        struct Node<T>* h2 = co->next;
+                        co->next = h;
+                        h->next = h2;
+
+                        same = true;
+                        break;
+                    }
+                    co = co->next;
+                }
+
+                if (!same)
+                    be_cu = be_cu->next;
+            }
+
+            this->start = temp_n->next;
         }
 
         std::string toString() {
