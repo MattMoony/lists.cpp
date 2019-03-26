@@ -39,6 +39,6 @@ int main()
     ls.append("Lorem Ipsum!");
 
     std::cout << ls.toString() << std::endl;
-    
+
     return 0;
 }
