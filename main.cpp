@@ -95,11 +95,30 @@ int main()
 
     std::cout << std::endl << std::endl;
 
-    /*struct LinkedList<std::string> ls;
-    ls.append("Hello World!");
-    ls.append("Lorem Ipsum!");
+    struct LinkedList<double> df;
+    double arr[10];
 
-    std::cout << ls.toString() << std::endl;*/
+    for (int i = 0; i < 10; i++) {
+        arr[i] = ((double)rand()/RAND_MAX)*25;
+    }
+
+    df.appendAll(arr, 10);
+    std::cout << "Added all: \t" << df.toString() << std::endl;
+    std::cout << "Length: \t" << df.size() << std::endl;
+
+    for (int i = 0; i < 10; i++) {
+        arr[i] = ((double)rand()/RAND_MAX)*50+25;
+    }
+
+    df.addAll(arr, 10, 4);
+    std::cout << "Added all: \t" << df.toString() << std::endl;
+    std::cout << "Length: \t" << df.size() << std::endl;
+
+//    struct LinkedList<std::string> ls;
+//    ls.append("Hello World!");
+//    ls.append("Lorem Ipsum!");
+
+//    std::cout << ls.toString() << std::endl;
 
     return 0;
 }
